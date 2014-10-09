@@ -1,0 +1,12 @@
+body {
+    background-color: #272727;
+    padding: 0;
+    margin: 1px auto;
+    width: 1220px;
+}
+img {
+    float: left;
+    margin: 1px;
+    width: 300px;
+    max-height: 222px;
+}
