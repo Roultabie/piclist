@@ -52,6 +52,7 @@ if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplat
     $page     = file_get_contents(SCRIPT_PATH . $pageTemplate);
     $replace  = (is_array($images)) ? implode(PHP_EOL, $images) : '';
     $noScript = (is_array($imagesNoScript)) ? implode(PHP_EOL, $imagesNoScript) : '';
+    $page     = str_replace('{galleryPath}', $galleryBase, $page);
     $page     = str_replace('{images}', $replace, $page);
     $page     = str_replace('{imagesNoScript}', $noScript, $page);
     file_put_contents(SCRIPT_PATH . $galleryPath . '/' . $galleryFile, $page, LOCK_EX);
