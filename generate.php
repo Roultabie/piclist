@@ -1,5 +1,5 @@
 <?php
-$imagePattern     = '/.*\.[jpg|JPG]/u'; // date like Ymd_his for google Nexus 5
+$imagePattern     = '/.*\.[jpg|JPG]/u';
 $galleryPath      = 'gallery';
 $galleryFile      = 'index.html';
 $thumbsDir        = 'thumbs';
@@ -39,14 +39,14 @@ if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplat
                 imagedestroy($source);
                 imagejpeg($thumb, SCRIPT_PATH . $thumbsPath . '/' . $name, 100);
             }
-            $currentImage                       = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageTag);
-            $currentImage                       = str_replace('{imageWidth}', $thumbWidth, $currentImage);
-            $currentImage                       = str_replace('{imageHeight}', $thumbHeight, $currentImage);
-            $images[]                           = $currentImage;
-            $currentImageNoScript               = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageNoScriptTag);
-            $currentImageNoScript               = str_replace('{imageWidth}', $thumbWidth, $currentImageNoScript);
-            $currentImageNoScript               = str_replace('{imageHeight}', $thumbHeight, $currentImageNoScript);
-            $imagesNoScript[]                   = $currentImageNoScript;
+            $currentImage         = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageTag);
+            $currentImage         = str_replace('{imageWidth}', $thumbWidth, $currentImage);
+            $currentImage         = str_replace('{imageHeight}', $thumbHeight, $currentImage);
+            $images[]             = $currentImage;
+            $currentImageNoScript = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageNoScriptTag);
+            $currentImageNoScript = str_replace('{imageWidth}', $thumbWidth, $currentImageNoScript);
+            $currentImageNoScript = str_replace('{imageHeight}', $thumbHeight, $currentImageNoScript);
+            $imagesNoScript[]     = $currentImageNoScript;
         }
     }
     $page     = file_get_contents(SCRIPT_PATH . $pageTemplate);
