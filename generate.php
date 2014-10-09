@@ -46,7 +46,7 @@ if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplat
             $currentImageNoScript               = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageNoScriptTag);
             $currentImageNoScript               = str_replace('{imageWidth}', $thumbWidth, $currentImageNoScript);
             $currentImageNoScript               = str_replace('{imageHeight}', $thumbHeight, $currentImageNoScript);
-            $imagesNoScript[]                   = $currentImage;
+            $imagesNoScript[]                   = $currentImageNoScript;
         }
     }
     $page     = file_get_contents(SCRIPT_PATH . $pageTemplate);
