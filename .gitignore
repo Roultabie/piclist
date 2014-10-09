@@ -2,3 +2,4 @@ config.php
 gallery/*.jpg
 gallery/*.JPG
 gallery/.well-known
+gallery/thumbs
