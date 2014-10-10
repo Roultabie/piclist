@@ -5,8 +5,8 @@ $galleryFile      = 'index.html';
 $thumbsDir        = 'thumbs';
 $thumbsPath       = $galleryPath . '/' . $thumbsDir;
 $pageTemplate     = 'template/index.html';
-$imageTag         = '<img src="blank.gif" alt="" data-echo="{imageUri}">';
-$imageNoScriptTag = '<img src="{imageUri}">';
+$imageTag         = '<a href="{imageUri}"><img src="blank.gif" alt="" data-echo="{thumbUri}"></a>';
+$imageNoScriptTag = '<a href="{imageUri}"><img src="{thumbUri}"></a>';
 $thumbWidth       = 200;
 $galleryBase      = '';
 
@@ -39,13 +39,19 @@ if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplat
                 imagedestroy($source);
                 imagejpeg($thumb, SCRIPT_PATH . $thumbsPath . '/' . $name, 100);
             }
-            $currentImage         = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageTag);
-            $currentImage         = str_replace('{imageWidth}', $thumbWidth, $currentImage);
-            $currentImage         = str_replace('{imageHeight}', $thumbHeight, $currentImage);
+            $currentImage         = str_replace('{thumbUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageTag);
+            $currentImage         = str_replace('{thumbWidth}', $thumbWidth, $currentImage);
+            $currentImage         = str_replace('{thumbHeight}', $thumbHeight, $currentImage);
+            $currentImage         = str_replace('{imageUri}', $galleryBase . '/' . $name, $currentImage);
+            $currentImage         = str_replace('{imageWidth}', $width, $currentImage);
+            $currentImage         = str_replace('{imageHeight}', $height, $currentImage);
             $images[]             = $currentImage;
-            $currentImageNoScript = str_replace('{imageUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageNoScriptTag);
-            $currentImageNoScript = str_replace('{imageWidth}', $thumbWidth, $currentImageNoScript);
-            $currentImageNoScript = str_replace('{imageHeight}', $thumbHeight, $currentImageNoScript);
+            $currentImageNoScript = str_replace('{thumbUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageNoScriptTag);
+            $currentImageNoScript = str_replace('{thumbWidth}', $thumbWidth, $currentImageNoScript);
+            $currentImageNoScript = str_replace('{thumbHeight}', $thumbHeight, $currentImageNoScript);
+            $currentImageNoScript = str_replace('{imageUri}', $galleryBase . '/' . $name, $currentImageNoScript);
+            $currentImageNoScript = str_replace('{imageWidth}', $width, $currentImageNoScript);
+            $currentImageNoScript = str_replace('{imageHeight}', $height, $currentImageNoScript);
             $imagesNoScript[]     = $currentImageNoScript;
         }
     }
