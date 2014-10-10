@@ -30,12 +30,11 @@ function generate($dirPath = '')
         $galleryFile = $dirPath . '/' . $GLOBALS['galleryFile'];
         if (!is_dir($thumbsPath)) mkdir($thumbsPath);
         $gallery = dir($dirPath);
-        $noScan  = array('.', '..', $GLOBALS['thumbsDir']);
         while (($entry = $gallery->read()) !== false) {
             if (preg_match($GLOBALS['imagePattern'], $entry)) {
                 $imagesList[] = $entry;
             }
-            elseif (!in_array($entry, $noScan) && is_dir($entry)) {
+            elseif (!in_array($entry, array('.', '..', $GLOBALS['thumbsDir'])) && is_dir($entry)) {
                 $dirList[] = $entry;
                 generate($dirPath);
             }
@@ -93,7 +92,6 @@ function generate($dirPath = '')
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
 }
-
 if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplate)) {
     generate();
 }
