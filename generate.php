@@ -5,8 +5,8 @@ $galleryFile      = 'index.html';
 $thumbsDir        = 'thumbs';
 $thumbsPath       = $galleryPath . '/' . $thumbsDir;
 $pageTemplate     = 'template/index.html';
-$imageTag         = '<img src="{imageUri}" width="{imageWidth}" height="{imageHeight}">';
-$imageNoScriptTag = '<img src="{imageUri}" width="{imageWidth}" height="{imageHeight}">';
+$imageTag         = '<img src="blank.gif" alt="" data-echo="{imageUri}">';
+$imageNoScriptTag = '<img src="{imageUri}">';
 $thumbWidth       = 200;
 $galleryBase      = '';
 
