@@ -1,12 +1,10 @@
 <?php
 $imagePattern     = '/.*\.[jpg|JPG]/u';
 $galleryPath      = 'gallery';
-$galleryFile      = 'index.html';
+$templateDir      = 'template';
 $thumbsDir        = 'thumbs';
 $thumbsPath       = $galleryPath . '/' . $thumbsDir;
 $pageTemplate     = 'template/index.html';
-$imageTag         = '<a href="{imageUri}"><img src="blank.gif" alt="" data-echo="{thumbUri}"></a>';
-$imageNoScriptTag = '<a href="{imageUri}"><img src="{thumbUri}"></a>';
 $thumbWidth       = 200;
 $galleryBase      = '';
 
@@ -47,6 +45,11 @@ function generate($dirPath = '')
             }
         }
         if (is_array($imagesList)) {
+            $tplPath = SCRIPT_PATH . $GLOBALS['templatePath'];
+            if (file_exists($tplPath . '/index.html')) $page = file_get_contents($tplPath . '/index.html');
+            if (file_exists($tplPath . '/directory.html')) $subDir = file_get_contents($tplPath . '/directory.html');
+            if (file_exists($tplPath . '/imagetag.html')) $imageTag = file_get_contents($tplPath . '/imagetag.html');
+            if (file_exists($tplPath . '/imagenoscripttag.html')) $imageNoScriptTag = file_get_contents($tplPath . '/imagenoscripttag.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
@@ -76,7 +79,6 @@ function generate($dirPath = '')
                 $imagesNoScript[]     = $currentImageNoScript;
             }
         }
-        $page     = file_get_contents(SCRIPT_PATH . $GLOBALS['pageTemplate']);
         $replace  = (is_array($images)) ? implode(PHP_EOL, $images) : '';
         $noScript = (is_array($imagesNoScript)) ? implode(PHP_EOL, $imagesNoScript) : '';
         $page     = str_replace('{galleryPath}', $galleryBase, $page);
