@@ -27,7 +27,7 @@ if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplat
         }
     }
     if (is_array($imagesList)) {
-        sort($imagesList);
+        ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
         foreach ($imagesList as $key => $name) {
             $imageUri                           = SCRIPT_PATH . $galleryPath . '/' . $name;
             list($width, $height, $type, $attr) = getimagesize($imageUri);
