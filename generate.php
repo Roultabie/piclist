@@ -4,7 +4,6 @@ $galleryPath      = 'gallery';
 $templateDir      = 'template';
 $thumbsDir        = 'thumbs';
 $thumbsPath       = $galleryPath . '/' . $thumbsDir;
-$pageTemplate     = 'template/index.html';
 $thumbWidth       = 200;
 $galleryBase      = '';
 
@@ -12,23 +11,19 @@ date_default_timezone_set('UTC');
 
 define('SCRIPT_PATH', str_replace('generate.php', '', __FILE__));
 
-if (file_exists(SCRIPT_PATH . 'config.php')) {
-    include SCRIPT_PATH . 'config.php';
-}
+if (file_exists(SCRIPT_PATH . 'config.php')) include SCRIPT_PATH . 'config.php';
 
 function generate($dirPath = '')
 {
     $imageTag         = $GLOBALS['imageTag'];
     $imageNoScriptTag = $GLOBALS['imageNoScriptTag'];
-    //$dirPath = rtrim($dirPath, '/');
     if (empty($dirPath))  {
-        $dirPath = SCRIPT_PATH . $GLOBALS['galleryPath'];
-        $galleryBase = $GLOBALS['galleryBase'];
+        $dirPath     = SCRIPT_PATH . $GLOBALS['galleryPath'];
     }
     else {
         list($before, $after) = explode($GLOBALS['galleryPath'], $dirPath);
-        $galleryBase = $GLOBALS['galleryBase'] . $after;
     }
+    $galleryBase = $GLOBALS['galleryBase'] . $after;
     if (is_dir($dirPath)) {
         $thumbsDir   = $GLOBALS['thumbsDir'];
         $thumbsPath  = $dirPath . '/' . $thumbsDir;
