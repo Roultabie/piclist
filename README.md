@@ -1,6 +1,6 @@
 #piclist
 
-*Simple php static gallery generator*
+*Simple php static gallery generator (less than 5kb)*
 
 ##How to use
 
@@ -28,6 +28,7 @@ A config.php can be created to changing options of the script.
 Availables vars are :  
 
 ```
+<?php
 $imagePattern     = '/.*\.[jpg|JPG]/u'; // A pattern PCRE of specific pics (like png or gif format or your imagination of script use)
 $galleryPath      = 'gallery'; // If you want move gallery dirname
 $galleryFile      = 'index.html'; // If you want use gallery with other script or call him in a specific name (like pics.html)
@@ -38,6 +39,7 @@ $imageTag         = '<a href="{imageUri}"><img src="blank.gif" alt="" data-echo=
 $imageNoScriptTag = '<a href="{imageUri}"><img src="{thumbUri}"></a>'; // img tag if javascript is disabled
 $thumbWidth       = 200; // the width of thumb
 $galleryBase      = ''; // In the case of using the script in sub directory, you must specify the entire url to access him here
+?>
 ```
 
 ###_Create your own theme_
@@ -46,13 +48,13 @@ You just need to add your theme dir with an index.html in the script root and de
 
 Availables tags ares :  
 
--**{galleryPath}** : Replaced by the the url of gallery
--**{images}** : Replaced by the base img tag
--**{imagesNoScript}** : Replace the no script img tag
--**{imageUri}** : Replaced by the url of current image
--**{imageWidth}** and {imageHeight} : Respectively replaced by the image width and height
--**{thumbUri}** : Replaced by the url of current thumb
--**{thumbWidth}** and **{thumbHeight}** : Respectively replaced by the thumb width and height
+- **{galleryPath}** : Replaced by the the url of gallery
+- **{images}** : Replaced by the base img tag
+- **{imagesNoScript}** : Replace the no script img tag
+- **{imageUri}** : Replaced by the url of current image
+- **{imageWidth}** and {imageHeight} : Respectively replaced by the image width and height
+- **{thumbUri}** : Replaced by the url of current thumb
+- **{thumbWidth}** and **{thumbHeight}** : Respectively replaced by the thumb width and height
 
 ###_Using multiples galleries_
 
@@ -66,5 +68,5 @@ Copy your script in your new path and adapt config.php
 
 ###_Recursive gallery_
 
-Actually, I don't known if coding specific recursive gallery is important, I want an KISS au light system.
+Actually, I don't known if coding specific recursive gallery is important, I want a KISS and light system.
 Perhaps in few times...
