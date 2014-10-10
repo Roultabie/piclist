@@ -41,13 +41,13 @@ function generate($dirPath = '')
                 $imagesList[] = $entry;
             }
             elseif (!in_array($entry, $noScan) && is_dir($entry)) {
+                $dirList[] = $entry;
                 generate($dirPath);
             }
         }
+        $tplPath = SCRIPT_PATH . $GLOBALS['templatePath'];
         if (is_array($imagesList)) {
-            $tplPath = SCRIPT_PATH . $GLOBALS['templatePath'];
             if (file_exists($tplPath . '/index.html')) $page = file_get_contents($tplPath . '/index.html');
-            if (file_exists($tplPath . '/directory.html')) $subDir = file_get_contents($tplPath . '/directory.html');
             if (file_exists($tplPath . '/imagetag.html')) $imageTag = file_get_contents($tplPath . '/imagetag.html');
             if (file_exists($tplPath . '/imagenoscripttag.html')) $imageNoScriptTag = file_get_contents($tplPath . '/imagenoscripttag.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
@@ -79,11 +79,22 @@ function generate($dirPath = '')
                 $imagesNoScript[]     = $currentImageNoScript;
             }
         }
+        if (is_array($dirList)) {
+            if (file_exists($tplPath . '/directory.html')) $dir = file_get_contents($tplPath . '/directory.html');
+            foreach ($dirList as $key => $name) {
+                $dirUri     = $dirPath . '/' . $name;
+                $currentDir = str_replace('{dirUri}', $dirUri, $dir);
+                $currentDir = str_replace('{dirName}', $name, $currentDir);
+                $dirs[]     = $currentDir;
+            }
+        }
         $replace  = (is_array($images)) ? implode(PHP_EOL, $images) : '';
         $noScript = (is_array($imagesNoScript)) ? implode(PHP_EOL, $imagesNoScript) : '';
+        $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
         $page     = str_replace('{galleryPath}', $galleryBase, $page);
         $page     = str_replace('{images}', $replace, $page);
         $page     = str_replace('{imagesNoScript}', $noScript, $page);
+        $age      = str_replace('{subDirs}', $subDirs, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
 }
