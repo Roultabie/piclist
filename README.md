@@ -68,5 +68,4 @@ Copy your script in your new path and adapt config.php
 
 ###_Recursive gallery_
 
-Actually, I don't known if coding specific recursive gallery is important, I want a KISS and light system.
-Perhaps in few times...
+_Coming soon_
