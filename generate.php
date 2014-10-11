@@ -15,8 +15,6 @@ if (file_exists(SCRIPT_PATH . 'config.php')) include SCRIPT_PATH . 'config.php';
 
 function generate($dirPath = '')
 {
-    $imageTag         = $GLOBALS['imageTag'];
-    $imageNoScriptTag = $GLOBALS['imageNoScriptTag'];
     if (empty($dirPath))  {
         $dirPath     = SCRIPT_PATH . $GLOBALS['galleryPath'];
     }
@@ -27,7 +25,7 @@ function generate($dirPath = '')
     if (is_dir($dirPath)) {
         $thumbsDir   = $GLOBALS['thumbsDir'];
         $thumbsPath  = $dirPath . '/' . $thumbsDir;
-        $galleryFile = $dirPath . '/' . $GLOBALS['galleryFile'];
+        $galleryFile = $dirPath . '/index.html';
         if (!is_dir($thumbsPath)) mkdir($thumbsPath);
         $gallery = dir($dirPath);
         while (($entry = $gallery->read()) !== false) {
@@ -39,11 +37,11 @@ function generate($dirPath = '')
                 generate($dirPath);
             }
         }
-        $tplPath = SCRIPT_PATH . $GLOBALS['templatePath'];
+        $tplPath = SCRIPT_PATH . $GLOBALS['templateDir'];
         if (is_array($imagesList)) {
             if (file_exists($tplPath . '/index.html')) $page = file_get_contents($tplPath . '/index.html');
-            if (file_exists($tplPath . '/imagetag.html')) $imageTag = file_get_contents($tplPath . '/imagetag.html');
-            if (file_exists($tplPath . '/imagenoscripttag.html')) $imageNoScriptTag = file_get_contents($tplPath . '/imagenoscripttag.html');
+            if (file_exists($tplPath . '/firstimagetag.html')) $firstImageTag = file_get_contents($tplPath . '/firstimagetag.html');
+            if (file_exists($tplPath . '/lastimagetag.html')) $lastImageTag = file_get_contents($tplPath . '/lastimagetag.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
@@ -55,22 +53,20 @@ function generate($dirPath = '')
                     $thumb  = imagecreatetruecolor($thumbWidth, $thumbHeight);
                     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $width, $height);
                     imagedestroy($source);
-                    imagejpeg($thumb, $thumbsPath . '/' . $name, 100);
+                    //imagejpeg($thumb, $thumbsPath . '/' . $name, 100);
                 }
-                $currentImage         = str_replace('{thumbUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageTag);
-                $currentImage         = str_replace('{thumbWidth}', $thumbWidth, $currentImage);
-                $currentImage         = str_replace('{thumbHeight}', $thumbHeight, $currentImage);
-                $currentImage         = str_replace('{imageUri}', $galleryBase . '/' . $name, $currentImage);
-                $currentImage         = str_replace('{imageWidth}', $width, $currentImage);
-                $currentImage         = str_replace('{imageHeight}', $height, $currentImage);
-                $images[]             = $currentImage;
-                $currentImageNoScript = str_replace('{thumbUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $imageNoScriptTag);
-                $currentImageNoScript = str_replace('{thumbWidth}', $thumbWidth, $currentImageNoScript);
-                $currentImageNoScript = str_replace('{thumbHeight}', $thumbHeight, $currentImageNoScript);
-                $currentImageNoScript = str_replace('{imageUri}', $galleryBase . '/' . $name, $currentImageNoScript);
-                $currentImageNoScript = str_replace('{imageWidth}', $width, $currentImageNoScript);
-                $currentImageNoScript = str_replace('{imageHeight}', $height, $currentImageNoScript);
-                $imagesNoScript[]     = $currentImageNoScript;
+                $assign = function($tag) use ($galleryBase, $thumbsDir, $name, $width, $height, $thumbWidth, $thumbHeight)
+                {
+                    $tag = str_replace('{thumbUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $tag);
+                    $tag = str_replace('{thumbWidth}', $thumbWidth, $tag);
+                    $tag = str_replace('{thumbHeight}', $thumbHeight, $tag);
+                    $tag = str_replace('{imageUri}', $galleryBase . '/' . $name, $tag);
+                    $tag = str_replace('{imageWidth}', $width, $tag);
+                    $tag = str_replace('{imageHeight}', $height, $tag);
+                    return $tag;
+                };
+                $firstTags[] = $assign($firstImageTag);
+                $lastTags[]  = $assign($lastImageTag);
             }
         }
         if (is_array($dirList)) {
@@ -82,13 +78,13 @@ function generate($dirPath = '')
                 $dirs[]     = $currentDir;
             }
         }
-        $replace  = (is_array($images)) ? implode(PHP_EOL, $images) : '';
-        $noScript = (is_array($imagesNoScript)) ? implode(PHP_EOL, $imagesNoScript) : '';
+        $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
+        $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
         $page     = str_replace('{galleryPath}', $galleryBase, $page);
         $page     = str_replace('{images}', $replace, $page);
         $page     = str_replace('{imagesNoScript}', $noScript, $page);
-        $age      = str_replace('{subDirs}', $subDirs, $page);
+        $page     = str_replace('{subDirs}', $subDirs, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
 }
