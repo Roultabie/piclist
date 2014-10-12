@@ -2,7 +2,7 @@
 $imagePattern     = '/.*\.[jpg|JPG]/u';
 $galleryPath      = 'gallery';
 $templateDir      = 'template';
-$thumbsDir        = 'thumbs';
+$thumbsDir        = '_thumbs';
 $thumbsPath       = $galleryPath . '/' . $thumbsDir;
 $thumbWidth       = 200;
 $galleryBase      = '';
@@ -32,9 +32,9 @@ function generate($dirPath = '')
             if (preg_match($GLOBALS['imagePattern'], $entry)) {
                 $imagesList[] = $entry;
             }
-            elseif (!in_array($entry, array('.', '..', $GLOBALS['thumbsDir'])) && is_dir($entry)) {
+            elseif (is_dir($dirPath . '/' .$entry) && !in_array($entry, array('.', '..')) && $entry[0] !== '_') {
                 $dirList[] = $entry;
-                generate($dirPath);
+                generate($dirPath . '/' .$entry);
             }
         }
         $tplPath = SCRIPT_PATH . $GLOBALS['templateDir'];
@@ -72,7 +72,7 @@ function generate($dirPath = '')
         if (is_array($dirList)) {
             if (file_exists($tplPath . '/directory.html')) $dir = file_get_contents($tplPath . '/directory.html');
             foreach ($dirList as $key => $name) {
-                $dirUri     = $dirPath . '/' . $name;
+                $dirUri     = $galleryBase . '/' . $name;
                 $currentDir = str_replace('{dirUri}', $dirUri, $dir);
                 $currentDir = str_replace('{dirName}', $name, $currentDir);
                 $dirs[]     = $currentDir;
