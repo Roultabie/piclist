@@ -42,6 +42,7 @@ function generate($dirPath = '')
             if (file_exists($tplPath . '/index.html')) $page = file_get_contents($tplPath . '/index.html');
             if (file_exists($tplPath . '/firstimagetag.html')) $firstImageTag = file_get_contents($tplPath . '/firstimagetag.html');
             if (file_exists($tplPath . '/lastimagetag.html')) $lastImageTag = file_get_contents($tplPath . '/lastimagetag.html');
+            if (file_exists($tplPath . '/directory.html')) $dir = file_get_contents($tplPath . '/directory.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
@@ -53,7 +54,7 @@ function generate($dirPath = '')
                     $thumb  = imagecreatetruecolor($thumbWidth, $thumbHeight);
                     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $width, $height);
                     imagedestroy($source);
-                    //imagejpeg($thumb, $thumbsPath . '/' . $name, 100);
+                    imagejpeg($thumb, $thumbsPath . '/' . $name, 100);
                 }
                 $assign = function($tag) use ($galleryBase, $thumbsDir, $name, $width, $height, $thumbWidth, $thumbHeight)
                 {
@@ -65,19 +66,22 @@ function generate($dirPath = '')
                 $lastTags[]  = $assign($lastImageTag);
             }
         }
+        $assignDir = function($dirUri, $dirName) use ($dir)
+        {
+            return str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
+        };
+        if (substr_count(str_replace($GLOBALS['galleryBase'], '', $galleryBase), '/') > 0) {
+            $dirs[] = $assignDir('../', '../');
+        }
         if (is_array($dirList)) {
-            if (file_exists($tplPath . '/directory.html')) $dir = file_get_contents($tplPath . '/directory.html');
             foreach ($dirList as $key => $name) {
-                $dirUri     = $galleryBase . '/' . $name;
-                $currentDir = str_replace('{dirUri}', $dirUri, $dir);
-                $currentDir = str_replace('{dirName}', $name, $currentDir);
-                $dirs[]     = $currentDir;
+                $dirs[] = $assignDir($galleryBase . '/' . $name, $name);
             }
         }
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $page     = str_replace('{galleryPath}', $galleryBase, $page);
+        $page     = str_replace('{galleryPath}', $GLOBALS['galleryBase'], $page);
         $page     = str_replace('{images}', $replace, $page);
         $page     = str_replace('{imagesNoScript}', $noScript, $page);
         $page     = str_replace('{subDirs}', $subDirs, $page);
