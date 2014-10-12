@@ -57,13 +57,9 @@ function generate($dirPath = '')
                 }
                 $assign = function($tag) use ($galleryBase, $thumbsDir, $name, $width, $height, $thumbWidth, $thumbHeight)
                 {
-                    $tag = str_replace('{thumbUri}', $galleryBase . '/' . $thumbsDir . '/' . $name, $tag);
-                    $tag = str_replace('{thumbWidth}', $thumbWidth, $tag);
-                    $tag = str_replace('{thumbHeight}', $thumbHeight, $tag);
-                    $tag = str_replace('{imageUri}', $galleryBase . '/' . $name, $tag);
-                    $tag = str_replace('{imageWidth}', $width, $tag);
-                    $tag = str_replace('{imageHeight}', $height, $tag);
-                    return $tag;
+                    $from = array('/{thumbUri}/', '/{thumbWidth}/', '/{thumbHeight}/', '/{imageUri}/', '/{imageWidth}/', '/{imageHeight}/');
+                    $to   = array($galleryBase . '/' . $thumbsDir . '/' . $name, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height);
+                    return preg_replace($from, $to, $tag);
                 };
                 $firstTags[] = $assign($firstImageTag);
                 $lastTags[]  = $assign($lastImageTag);
