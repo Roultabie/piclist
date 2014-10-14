@@ -1,27 +1,29 @@
 <?php
-$imagePattern     = '/.*\.[jpg|JPG]/u';
-$galleryPath      = 'gallery';
-$templateDir      = 'template';
-$thumbsDir        = '_thumbs';
-$thumbsPath       = $galleryPath . '/' . $thumbsDir;
-$thumbWidth       = 200;
-$galleryBase      = '';
+$imagePattern = '/.*\.[jpg|JPG]/u';
+$galleryDir   = 'gallery';
+$templateDir  = 'template';
+$thumbsDir    = '_thumbs';
+$thumbsPath   = $galleryDir . '/' . $thumbsDir;
+$thumbWidth   = 200;
+$publicBase   = '';
 
 date_default_timezone_set('UTC');
 
 define('SCRIPT_PATH', str_replace('generate.php', '', __FILE__));
-
 if (file_exists(SCRIPT_PATH . 'config.php')) include SCRIPT_PATH . 'config.php';
+define('GALLERY_PATH', (!empty($argv[1])) ? $argv[1] : SCRIPT_PATH .$galleryDir);
+define('PUBLIC_BASE', (!empty($argv[2])) ? $argv[2] : $publicBase);
+define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_PATH . '/_' . $templateDir : SCRIPT_PATH . $templateDir);
 
 function generate($dirPath = '')
 {
     if (empty($dirPath))  {
-        $dirPath     = SCRIPT_PATH . $GLOBALS['galleryPath'];
+        $dirPath = GALLERY_PATH;
     }
     else {
-        list($before, $after) = explode($GLOBALS['galleryPath'], $dirPath);
+        list($before, $after) = explode($GLOBALS['galleryDir'], $dirPath);
     }
-    $galleryBase = $GLOBALS['galleryBase'] . $after;
+    $galleryBase = PUBLIC_BASE . $after;
     if (is_dir($dirPath)) {
         $thumbsDir   = $GLOBALS['thumbsDir'];
         $thumbsPath  = $dirPath . '/' . $thumbsDir;
@@ -37,12 +39,11 @@ function generate($dirPath = '')
                 generate($dirPath . '/' .$entry);
             }
         }
-        $tplPath = SCRIPT_PATH . $GLOBALS['templateDir'];
         if (is_array($imagesList)) {
-            if (file_exists($tplPath . '/index.html')) $page = file_get_contents($tplPath . '/index.html');
-            if (file_exists($tplPath . '/firstimagetag.html')) $firstImageTag = file_get_contents($tplPath . '/firstimagetag.html');
-            if (file_exists($tplPath . '/lastimagetag.html')) $lastImageTag = file_get_contents($tplPath . '/lastimagetag.html');
-            if (file_exists($tplPath . '/directory.html')) $dir = file_get_contents($tplPath . '/directory.html');
+            if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
+            if (file_exists(TEMPLATE_PATH . '/firstimagetag.html')) $firstImageTag = file_get_contents(TEMPLATE_PATH . '/firstimagetag.html');
+            if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
+            if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
@@ -70,7 +71,7 @@ function generate($dirPath = '')
         {
             return str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
         };
-        if (substr_count(str_replace($GLOBALS['galleryBase'], '', $galleryBase), '/') > 0) {
+        if (substr_count(str_replace(PUBLIC_BASE, '', $galleryBase), '/') > 0) {
             $dirs[] = $assignDir('../', '../');
         }
         if (is_array($dirList)) {
@@ -81,14 +82,14 @@ function generate($dirPath = '')
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $page     = str_replace('{galleryPath}', $GLOBALS['galleryBase'], $page);
+        $page     = str_replace('{galleryPath}', PUBLIC_BASE, $page);
         $page     = str_replace('{images}', $replace, $page);
         $page     = str_replace('{imagesNoScript}', $noScript, $page);
         $page     = str_replace('{subDirs}', $subDirs, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
 }
-if (is_dir(SCRIPT_PATH . $galleryPath) && file_exists(SCRIPT_PATH . $pageTemplate)) {
+if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) {
     generate();
 }
 ?>
