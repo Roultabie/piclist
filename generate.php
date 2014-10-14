@@ -13,6 +13,7 @@ define('SCRIPT_PATH', str_replace('generate.php', '', __FILE__));
 if (file_exists(SCRIPT_PATH . 'config.php')) include SCRIPT_PATH . 'config.php';
 define('GALLERY_PATH', (!empty($argv[1])) ? $argv[1] : SCRIPT_PATH .$galleryDir);
 define('PUBLIC_BASE', (!empty($argv[2])) ? $argv[2] : $publicBase);
+define('GALLERY_DIR', (!empty($publicBase)) ? array_pop(explode('/', PUBLIC_BASE)) : $galleryDir);
 define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_PATH . '/_' . $templateDir : SCRIPT_PATH . $templateDir);
 
 function generate($dirPath = '')
@@ -21,7 +22,7 @@ function generate($dirPath = '')
         $dirPath = GALLERY_PATH;
     }
     else {
-        list($before, $after) = explode($GLOBALS['galleryDir'], $dirPath);
+        list($before, $after) = explode(GALLERY_DIR, $dirPath);
     }
     $galleryBase = PUBLIC_BASE . $after;
     if (is_dir($dirPath)) {
