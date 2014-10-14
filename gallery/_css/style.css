@@ -10,3 +10,21 @@ img {
     width: 300px;
     max-height: 222px;
 }
+.directory {
+    display: block;
+    width: 300px;
+    max-height: 222px;
+    min-height: 222px;
+    float: left;
+    margin: 1px;
+    background-color: darkgrey;
+    /*border-radius: 0px 30px 0px 0px;*/
+}
+.directory a {
+    display: inline-block;
+    width: 300px;
+    max-height: 222px;
+    min-height: 222px;
+    margin-top: 100px;
+    text-align: center;
+}
