@@ -28,13 +28,14 @@ function generate($dirPath = '')
         $thumbsDir   = $GLOBALS['thumbsDir'];
         $thumbsPath  = $dirPath . '/' . $thumbsDir;
         $galleryFile = $dirPath . '/index.html';
+        $noScan      = (is_array($GLOBALS['noScan'])) ? array_merge($GLOBALS['noScan'], array('.', '..')) : array('.', '..');
         if (!is_dir($thumbsPath)) mkdir($thumbsPath);
         $gallery = dir($dirPath);
         while (($entry = $gallery->read()) !== false) {
             if (preg_match($GLOBALS['imagePattern'], $entry)) {
                 $imagesList[] = $entry;
             }
-            elseif (is_dir($dirPath . '/' .$entry) && !in_array($entry, array('.', '..')) && $entry[0] !== '_') {
+            elseif (is_dir($dirPath . '/' .$entry) && !in_array($entry, $noScan) && $entry[0] !== '_') {
                 $dirList[] = $entry;
                 generate($dirPath . '/' .$entry);
             }
