@@ -1,5 +1,5 @@
 <?php
-$imagePattern = '/.*\.[jpg|JPG]/u';
+$imagePattern = '/[^.]+.jpg|png|gif/u';
 $galleryDir   = 'gallery';
 $templateDir  = 'template';
 $thumbsDir    = '_thumbs';
@@ -46,17 +46,20 @@ function generate($dirPath = '')
             if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
             if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
+            $imageFunctions = array(1 => array('fromgif', 'gif', ''), 2 => array('fromjpeg', 'jpeg', 100), 3 => array('frompng', 'png', 9), 4 => array('fromwbmp', '2wbmp'));
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
                 list($width, $height, $type, $attr) = getimagesize($imageUri);
+                $createFrom = 'imagecreate' . $imageFunctions[$type][0];
+                $createTo   = 'image' . $imageFunctions[$type][1];
                 $thumbWidth                         = $GLOBALS['thumbWidth'];
                 $thumbHeight                        = round($height * $thumbWidth / $width);
                 if (!file_exists($thumbsPath . '/' . $name)) {
-                    $source = imagecreatefromjpeg ($imageUri);
+                    $source = $createFrom($imageUri);
                     $thumb  = imagecreatetruecolor($thumbWidth, $thumbHeight);
                     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $width, $height);
                     imagedestroy($source);
-                    imagejpeg($thumb, $thumbsPath . '/' . $name, 100);
+                    $createTo($thumb, $thumbsPath . '/' . $name, $imageFunctions[$type][2]);
                 }
                 $assign = function($tag) use ($galleryBase, $thumbsDir, $name, $width, $height, $thumbWidth, $thumbHeight)
                 {
