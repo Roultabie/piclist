@@ -40,11 +40,11 @@ function generate($dirPath = '')
                 generate($dirPath . '/' .$entry);
             }
         }
+        if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
+        if (file_exists(TEMPLATE_PATH . '/firstimagetag.html')) $firstImageTag = file_get_contents(TEMPLATE_PATH . '/firstimagetag.html');
+        if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
+        if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
         if (is_array($imagesList)) {
-            if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
-            if (file_exists(TEMPLATE_PATH . '/firstimagetag.html')) $firstImageTag = file_get_contents(TEMPLATE_PATH . '/firstimagetag.html');
-            if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
-            if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
             $imageFunctions = array(1 => array('fromgif', 'gif'), 2 => array('fromjpeg', 'jpeg', 100), 3 => array('frompng', 'png', 9), 4 => array('fromwbmp', '2wbmp'));
             foreach ($imagesList as $key => $name) {
