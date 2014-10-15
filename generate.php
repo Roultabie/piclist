@@ -5,6 +5,7 @@ $templateDir  = 'template';
 $thumbsDir    = '_thumbs';
 $thumbsPath   = $galleryDir . '/' . $thumbsDir;
 $thumbWidth   = 200;
+$thumbRatio   = array('4','3');
 $publicBase   = '';
 
 date_default_timezone_set('UTC');
@@ -60,6 +61,11 @@ function generate($dirPath = '')
                 $createTo   = 'image' . $imageFunctions[$type][1];
                 $thumbWidth                         = $GLOBALS['thumbWidth'];
                 $thumbHeight                        = round($height * $thumbWidth / $width);
+                $thumbHeightMax                     = round($thumbWidth * $GLOBALS['thumbRatio'][1] / $GLOBALS['thumbRatio'][0]);
+                if ($thumbHeight > $thumbHeightMax) {
+                    $thumbWidth  = round($width * $thumbHeightMax / $height);
+                    $thumbHeight = $thumbHeightMax;
+                }
                 if (!file_exists($thumbsPath . '/' . $name)) {
                     $source = $createFrom($imageUri);
                     $thumb  = imagecreatetruecolor($thumbWidth, $thumbHeight);
