@@ -67,14 +67,10 @@ function generate($dirPath = '')
                     imagedestroy($source);
                     $createTo($thumb, $thumbsPath . '/' . $name, $imageFunctions[$type][2]);
                 }
-                $assign = function($tag) use ($galleryBase, $thumbsDir, $name, $width, $height, $thumbWidth, $thumbHeight)
-                {
-                    $from = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}');
-                    $to   = array($galleryBase . '/' . $thumbsDir . '/' . $name, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height);
-                    return str_replace($from, $to, $tag);
-                };
-                $firstTags[] = $assign($firstImageTag);
-                $lastTags[]  = $assign($lastImageTag);
+                $from = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}');
+                $to   = array($galleryBase . '/' . $thumbsDir . '/' . $name, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height);
+                $firstTags[] = str_replace($from, $to, $firstImageTag);
+                $lastTags[]  = str_replace($from, $to, $lastImageTag);
             }
         }
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
