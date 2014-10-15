@@ -72,29 +72,24 @@ function generate($dirPath = '')
                 $lastTags[]  = $assign($lastImageTag);
             }
         }
-        $assignDir = function($dirUri, $dirName) use ($dir)
+        $assignDir = function($dirUri, $dirName) use (&$dirs, $dir)
         {
-            return str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
+            $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
         };
-        if (substr_count(str_replace(PUBLIC_BASE, '', $galleryBase), '/') > 0) {
-            $dirs[] = $assignDir('../', '..');
-        }
+        if (substr_count(str_replace(PUBLIC_BASE, '', $galleryBase), '/') > 0) $assignDir('../', '..');
         if (is_array($dirList)) {
             foreach ($dirList as $key => $name) {
-                $dirs[] = $assignDir($galleryBase . '/' . $name, $name);
+                $assignDir($galleryBase . '/' . $name, $name);
             }
         }
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $page     = str_replace('{galleryPath}', PUBLIC_BASE, $page);
-        $page     = str_replace('{images}', $replace, $page);
-        $page     = str_replace('{imagesNoScript}', $noScript, $page);
-        $page     = str_replace('{subDirs}', $subDirs, $page);
+        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{subDirs}');
+        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $subDirs);
+        $page     = str_replace($pageFrom, $pageTo, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
 }
-if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) {
-    generate();
-}
+if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) generate();
 ?>
