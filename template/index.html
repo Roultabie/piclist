@@ -1,7 +1,52 @@
 <html>
 <head>
     <title>piclist</title>
-    <link rel="stylesheet" href="{galleryPath}/_css/style.css">
+    <style type="text/css">
+        body {
+        background-color: #272727;
+        padding: 0;
+        margin: 1px auto;
+        width: 1220px;
+        font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+    }
+    ul {
+        list-style: none;
+    }
+    ul, li {
+        margin: 0;
+        padding: 0;
+    }
+    a, .directory {
+        display: inline-block;
+        width: 200px;
+        margin: 1px;
+        line-height: 150px;
+        height: 150px;
+        max-height: 150px;
+        float: left;
+        background-color: #303030;
+        position: relative;
+    }
+    a, img, .directory {
+        width: 200px;
+    }
+    img {
+        float: left;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .directory {
+        float: left;
+        background-color: darkgrey;
+    }
+    .directory a {
+        text-align: center;
+        background-color: transparent;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    </style>
 </head>
 <body>
 {subDirs}
