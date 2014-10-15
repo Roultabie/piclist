@@ -9,10 +9,31 @@
         width: 1220px;
         font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
     }
-    a {
-        /*text-align: center;*/
+    #ariane, #ariane li {
+        float: left;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        font-style: italic;
     }
-    a, .directory {
+    #ariane li:last-child {
+        color: white;
+    }
+    #ariane a {
+        color: darkgrey;
+        text-decoration: none;
+    }
+    #ariane a:after {
+        content: '>';
+        margin-left: 3px;
+        margin-right: 3px;
+        color: grey;
+    }
+    #gallery {
+        clear: both;
+        width: 100%;
+    }
+    #gallery a, .directory {
         display: block;
         width: 200px;
         margin: 1px;
@@ -23,7 +44,7 @@
         background-color: #303030;
         position: relative;
     }
-    img {
+    #gallery img {
         position: absolute;
         display: block;
         top: 0;
@@ -32,11 +53,11 @@
         right:0;
         margin: auto;
     }
-    .directory {
+    #gallery .directory {
         float: left;
         background-color: darkgrey;
     }
-    .directory a {
+    #gallery .directory a {
         text-align: center;
         background-color: transparent;
         text-decoration: none;
@@ -45,7 +66,13 @@
     </style>
 </head>
 <body>
+<ul id="ariane">
+{ariane}
+<li>{currentDir}</li>
+</ul>
+<div id="gallery">
 {subDirs}
 {images}
+</div>
 </body>
 </html>

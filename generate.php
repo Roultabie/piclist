@@ -17,24 +17,27 @@ define('PUBLIC_BASE', (!empty($argv[2])) ? $argv[2] : $publicBase);
 define('GALLERY_DIR', (!empty(PUBLIC_BASE)) ? array_pop(explode('/', PUBLIC_BASE)) : $galleryDir);
 define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_PATH . '/_' . $templateDir : SCRIPT_PATH . $templateDir);
 
-function generate($dirPath = '')
+function generate($dirPath = '', $currentDir = '', $ariane = '')
 {
     if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
     if (file_exists(TEMPLATE_PATH . '/firstimagetag.html')) $firstImageTag = file_get_contents(TEMPLATE_PATH . '/firstimagetag.html');
     if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
     if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
+    if (file_exists(TEMPLATE_PATH . '/ariane.html')) $arianeTag = file_get_contents(TEMPLATE_PATH . '/ariane.html');
     $assignDir = function($dirUri, $dirName) use (&$dirs, $dir)
     {
         $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
     };
     if (empty($dirPath))  {
-        $dirPath = GALLERY_PATH;
+        $dirPath    = GALLERY_PATH;
+        $currentDir = GALLERY_DIR;
     }
     else {
         list($before, $after) = explode(GALLERY_DIR, $dirPath);
         $assignDir('../', '..');
     }
     $galleryBase = PUBLIC_BASE . $after;
+    $fullAriane = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
     if (is_dir($dirPath)) {
         $thumbsDir   = $GLOBALS['thumbsDir'];
         $thumbsPath  = $dirPath . '/' . $thumbsDir;
@@ -48,7 +51,7 @@ function generate($dirPath = '')
             }
             elseif (is_dir($dirPath . '/' .$entry) && !in_array($entry, $noScan) && $entry[0] !== '_') {
                 $assignDir($galleryBase . '/' . $entry, $entry);
-                generate($dirPath . '/' .$entry);
+                generate($dirPath . '/' .$entry, $entry, $fullAriane);
             }
         }
         if (is_array($imagesList)) {
@@ -82,8 +85,8 @@ function generate($dirPath = '')
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{subDirs}');
-        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $subDirs);
+        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{subDirs}', '{ariane}', '{currentDir}');
+        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $subDirs, $ariane, $currentDir);
         $page     = str_replace($pageFrom, $pageTo, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
