@@ -1,5 +1,5 @@
 <?php
-$imagePattern = '/[^.]+.jpg|png|gif/u';
+$imagePattern = '/[^.]+\.(jpg|png|gif)/u';
 $galleryDir   = 'gallery';
 $templateDir  = 'template';
 $thumbsDir    = '_thumbs';
