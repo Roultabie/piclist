@@ -76,7 +76,7 @@ function generate($dirPath = '')
         {
             $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
         };
-        if (substr_count(str_replace(PUBLIC_BASE, '', $galleryBase), '/') > 0) $assignDir('../', '..');
+        if (strpos($after, '/') !== false) $assignDir('../', '..');
         if (is_array($dirList)) {
             foreach ($dirList as $key => $name) {
                 $assignDir($galleryBase . '/' . $name, $name);
