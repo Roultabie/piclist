@@ -29,16 +29,14 @@ Availables vars are :
 
 ```
 <?php
-$imagePattern     = '/.*\.[jpg|JPG]/u'; // A pattern PCRE of specific pics (like png or gif format or your imagination of script use)
-$galleryPath      = 'gallery'; // If you want move gallery dirname
-$galleryFile      = 'index.html'; // If you want use gallery with other script or call him in a specific name (like pics.html)
-$thumbsDir        = 'thumbs'; // If you want move thumbs dirname
-$thumbsPath       = $galleryPath . '/' . $thumbsDir; // ... Never change it, if you don't know what you do
-$pageTemplate     = 'template/index.html'; // If you want use your own theme, add the path here
-$imageTag         = '<a href="{imageUri}"><img src="blank.gif" alt="" data-echo="{thumbUri}"></a>'; // Base img tag
-$imageNoScriptTag = '<a href="{imageUri}"><img src="{thumbUri}"></a>'; // img tag if javascript is disabled
-$thumbWidth       = 200; // the width of thumb
-$galleryBase      = ''; // In the case of using the script in sub directory, you must specify the entire url to access him here
+$imagePattern = '/([^.]+)\.(jpg|png|gif)/u'; // A pattern PCRE of specific pics (like png or gif format or your imagination of script use)
+$galleryDir   = 'gallery'; // If you want rename default gallery dirname
+$templateDir  = 'template'; // If you want rename default template dirname
+$thumbsDir    = '_thumbs'; // If you want rename default thumbs dirname (don't forger undescore)
+$thumbsPath   = $galleryDir . '/' . $thumbsDir; // ... Never change it, if you don't know what you do
+$thumbWidth   = 200; // Width of thumbs
+$thumbRatio   = array('4','3'); // Ratio of thumbs
+$publicBase   = ''; // In the case of using the script in sub directory, you must specify the entire url to access him here like /access/to/my/gallery
 ?>
 ```
 
@@ -55,17 +53,18 @@ Availables tags ares :
 - **{imageWidth}** and {imageHeight} : Respectively replaced by the image width and height
 - **{thumbUri}** : Replaced by the url of current thumb
 - **{thumbWidth}** and **{thumbHeight}** : Respectively replaced by the thumb width and height
+- **{subDirs}** : Replaced by sub directories
+- **{ariane}** : The breadcumbs
+- **{currentDir}** : Replaced by current dir name
+- **{comment}** : Comment of current gallery (if comment.html file exists)
+- **imageComment}** : Comment of each image (if img.html files exists)
 
 ###_Using multiples galleries_
 
-#### In the same script dir
-
-_Coming soon_
-
 #### In another path
 
-Copy your script in your new path and adapt config.php
+The command line to launch is : php generate.php /path/to/another/path (if needed: /my/sub/dir/gallery)  
 
 ###_Recursive gallery_
 
-_Coming soon_
+Just create sub directories and upload your pictures.
