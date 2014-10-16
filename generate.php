@@ -37,7 +37,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         $assignDir('../', '..');
     }
     $galleryBase = PUBLIC_BASE . $after;
-    $fullAriane = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
+    $fullAriane  = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
     if (is_dir($dirPath)) {
         $thumbsDir   = $GLOBALS['thumbsDir'];
         $thumbsPath  = $dirPath . '/' . $thumbsDir;
@@ -60,11 +60,11 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
                 list($width, $height, $type, $attr) = getimagesize($imageUri);
-                $createFrom = 'imagecreate' . $imageFunctions[$type][0];
-                $createTo   = 'image' . $imageFunctions[$type][1];
-                $thumbWidth                         = $GLOBALS['thumbWidth'];
-                $thumbHeight                        = round($height * $thumbWidth / $width);
-                $thumbHeightMax                     = round($thumbWidth * $GLOBALS['thumbRatio'][1] / $GLOBALS['thumbRatio'][0]);
+                $createFrom     = 'imagecreate' . $imageFunctions[$type][0];
+                $createTo       = 'image' . $imageFunctions[$type][1];
+                $thumbWidth     = $GLOBALS['thumbWidth'];
+                $thumbHeight    = round($height * $thumbWidth / $width);
+                $thumbHeightMax = round($thumbWidth * $GLOBALS['thumbRatio'][1] / $GLOBALS['thumbRatio'][0]);
                 if ($thumbHeight > $thumbHeightMax) {
                     $thumbWidth  = round($width * $thumbHeightMax / $height);
                     $thumbHeight = $thumbHeightMax;
