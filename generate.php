@@ -1,5 +1,5 @@
 <?php
-$imagePattern = '/[^.]+\.(jpg|png|gif)/u';
+$imagePattern = '/([^.]+)\.(jpg|png|gif)/u';
 $galleryDir   = 'gallery';
 $templateDir  = 'template';
 $thumbsDir    = '_thumbs';
@@ -76,17 +76,20 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                     imagedestroy($source);
                     $createTo($thumb, $thumbsPath . '/' . $name, $imageFunctions[$type][2]);
                 }
-                $from = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}');
-                $to   = array($galleryBase . '/' . $thumbsDir . '/' . $name, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height);
-                $firstTags[] = str_replace($from, $to, $firstImageTag);
-                $lastTags[]  = str_replace($from, $to, $lastImageTag);
+                $commentName  = preg_replace($GLOBALS['imagePattern'], '${1}.html', $name);
+                $imageComment = (file_exists($galleryBase . '/' .$commentName)) ? file_get_contents($galleryBase . '/' .$commentName) : '';
+                $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}');
+                $to           = array($galleryBase . '/' . $thumbsDir . '/' . $name, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment);
+                $firstTags[]  = str_replace($from, $to, $firstImageTag);
+                $lastTags[]   = str_replace($from, $to, $lastImageTag);
             }
         }
+        $comment  = (file_exists($galleryBase . '/comment.html')) ? file_get_contents($galleryBase . '/comment.html') : '';
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{subDirs}', '{ariane}', '{currentDir}');
-        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $subDirs, $ariane, $currentDir);
+        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
+        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $subDirs, $ariane, $currentDir, $comment);
         $page     = str_replace($pageFrom, $pageTo, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
