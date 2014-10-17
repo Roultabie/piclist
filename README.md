@@ -1,6 +1,7 @@
 #piclist
 
-*Simple php static gallery generator (less than 5kb)*
+*Simple php static gallery generator (less than 5kb)*  
+*Needd PHP >= 5.3
 
 ##How to use
 
@@ -17,7 +18,7 @@
 
 ###_Uploading_
 
-- Upload your pics in the gallery dir and wait for the cron do its job.
+- Upload your pics and dirs in the gallery dir and wait for the cron do its job.
 
 ##Extras
 
@@ -72,7 +73,24 @@ Availables tags are :
 
 #### In another path
 
-The command line to launch is : php generate.php /path/to/another/path (if needed: /my/sub/dir/gallery)  
+The command line to launch is : ```php generate.php /path/to/another/path (if needed: /my/sub/dir/gallery)```  
+
+Commande lines examples : 
+
+Script dir is on ```/var/www``` and users galleries are in ```/home/{user1,userX}/~public/``` and the url to access them are like : user1.website.com, userX.website.com  
+
+```php /var/www/piclist/generate.php /home/user1/~public/```  
+```php /var/www/piclist/generate.php /home/userX/~public/```  
+
+Now, users have galleries on differents sub dirs. User1 in mywebsite/pictures , user2 42/misc/perfect/images url to access them are ~public/gallery and ~public/42/misc/perfect/images:   
+
+```#User 1:
+php /var/www/piclist/generate.php /home/user1/~public/pictures /gallery
+
+#user2:
+php /var/www/piclist/generate.php /home/user2/~public/42/misc/perfect/images /42/misc/perfect/images```  
+
+Users can theming galleries with _template dir in galleries root.
 
 ###_Recursive gallery_
 
