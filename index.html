@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Piclist by Roultabie</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Roultabie/piclist">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Roultabie/piclist/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Roultabie/piclist/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Piclist</h1>
+          <p>micro galleries generator for PHP CLI</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Roultabie">Roultabie</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="piclist" class="anchor" href="#piclist"><span class="octicon octicon-link"></span></a>piclist</h1>
+
+<p><em>Simple php static gallery generator (less than 5kb)</em><br>
+*Needd PHP &gt;= 5.3</p>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+
+<h3>
+<a name="script-installation" class="anchor" href="#script-installation"><span class="octicon octicon-link"></span></a><em>Script installation</em>
+</h3>
+
+<ul>
+<li>Download the script at <a href="https://github.com/Roultabie/piclist/archive/master.zip">https://github.com/Roultabie/piclist/archive/master.zip</a>
+</li>
+<li>Extract it on your web server</li>
+<li>Create a cron task like this : <code>* 1 * * * php /path/to/the/script/generate.php</code>
+</li>
+<li>In the case of using the script in sub directory, you must specify the entire url to access him in config file like : <code>$galleryBase = '//your.domain.com/pics/';</code>
+</li>
+</ul>
+
+<h3>
+<a name="server-configuration-optional" class="anchor" href="#server-configuration-optional"><span class="octicon octicon-link"></span></a><em>Server configuration (optional)</em>
+</h3>
+
+<ul>
+<li>Create a VirtualHost that points to the gallery dir like <code>/path/to/the/script/gallery</code>
+</li>
+</ul>
+
+<h3>
+<a name="uploading" class="anchor" href="#uploading"><span class="octicon octicon-link"></span></a><em>Uploading</em>
+</h3>
+
+<ul>
+<li>Upload your pics and dirs in the gallery dir and wait for the cron do its job.</li>
+</ul>
+
+<h2>
+<a name="extras" class="anchor" href="#extras"><span class="octicon octicon-link"></span></a>Extras</h2>
+
+<h3>
+<a name="configphp" class="anchor" href="#configphp"><span class="octicon octicon-link"></span></a><em>config.php</em>
+</h3>
+
+<p>A config.php can be created to changing options of the script.  </p>
+
+<p>Availables vars are :  </p>
+
+<pre><code>&lt;?php
+$imagePattern = '/([^.]+)\.(jpg|png|gif)/u'; // A pattern PCRE of specific pics (like png or gif format or your imagination of script use)
+$galleryDir   = 'gallery'; // If you want rename default gallery dirname
+$templateDir  = 'template'; // If you want rename default template dirname
+$thumbsDir    = '_thumbs'; // If you want rename default thumbs dirname (don't forger undescore)
+$thumbsPath   = $galleryDir . '/' . $thumbsDir; // ... Never change it, if you don't know what you do
+$thumbWidth   = 200; // Width of thumbs
+$thumbRatio   = array('4','3'); // Ratio of thumbs
+$publicBase   = ''; // In the case of using the script in sub directory, you must specify the entire url to access him here like /access/to/my/gallery
+?&gt;
+</code></pre>
+
+<h3>
+<a name="create-your-own-theme" class="anchor" href="#create-your-own-theme"><span class="octicon octicon-link"></span></a><em>Create your own theme</em>
+</h3>
+
+<p>You just need to create a dir named  <code>_template</code> in your gallery dir,
+This dir need this 5 files :  </p>
+
+<ul>
+<li>index.html (gallery main page)</li>
+<li>firstimagetag.html (principal image tag)</li>
+<li>lastimagetag.html (in case if you are using javascript, you can use this for <code>&lt;noscript&gt;</code> section</li>
+<li>directory.html (the sub dir view)</li>
+<li>ariane.html (the breadcumb)</li>
+</ul>
+
+<p>For display elements, you must use tags syntax : <code>{mytag}</code> in this files.</p>
+
+<p>Availables tags are :  </p>
+
+<ul>
+<li>
+<strong>{galleryPath}</strong> : Replaced by the the url of gallery</li>
+<li>
+<strong>{images}</strong> : Replaced by the base img tag</li>
+<li>
+<strong>{imagesNoScript}</strong> : Replace the no script img tag</li>
+<li>
+<strong>{imageUri}</strong> : Replaced by the url of current image</li>
+<li>
+<strong>{imageWidth}</strong> and {imageHeight} : Respectively replaced by the image width and height</li>
+<li>
+<strong>{thumbUri}</strong> : Replaced by the url of current thumb</li>
+<li>
+<strong>{thumbWidth}</strong> and <strong>{thumbHeight}</strong> : Respectively replaced by the thumb width and height</li>
+<li>
+<strong>{subDirs}</strong> : Replaced by sub directories</li>
+<li>
+<strong>{ariane}</strong> : The breadcumb</li>
+<li>
+<strong>{currentDir}</strong> : Replaced by current dir name</li>
+<li>
+<strong>{comment}</strong> : Comment of current gallery (if comment.html file exists)</li>
+<li>
+<strong>imageComment}</strong> : Comment of each image (if img.html files exists)</li>
+</ul>
+
+<h3>
+<a name="using-multiples-galleries" class="anchor" href="#using-multiples-galleries"><span class="octicon octicon-link"></span></a><em>Using multiples galleries</em>
+</h3>
+
+<h4>
+<a name="in-another-path" class="anchor" href="#in-another-path"><span class="octicon octicon-link"></span></a>In another path</h4>
+
+<p>The command line to launch is : <code>php generate.php /path/to/another/path (if needed: /my/sub/dir/gallery)</code>  </p>
+
+<p>Commande lines examples : </p>
+
+<p>Script dir is on <code>/var/www</code> and users galleries are in <code>/home/{user1,userX}/~public/</code> and the url to access them are like : <code>user1.website.com</code>, <code>userX.website.com</code>: </p>
+
+<p><code>php /var/www/piclist/generate.php /home/user1/~public/</code><br>
+<code>php /var/www/piclist/generate.php /home/userX/~public/</code>  </p>
+
+<p>Now, users have galleries on differents sub dirs. User1 in ~public/pictures , user2 ~/public/42/misc/perfect/images url to access them are <code>user1.mywebsite.com/pictures</code> <code>user2.mywebsite.com/42/misc/perfect/images</code>:  </p>
+
+<pre><code>#User 1:
+php /var/www/piclist/generate.php /home/user1/~public/pictures /pictures
+
+#user2:
+php /var/www/piclist/generate.php /home/user2/~public/42/misc/perfect/images /42/misc/perfect/images
+</code></pre>
+
+<p>Users can theming galleries with _template dir in galleries root.</p>
+
+<h3>
+<a name="recursive-gallery" class="anchor" href="#recursive-gallery"><span class="octicon octicon-link"></span></a><em>Recursive gallery</em>
+</h3>
+
+<p>Just create sub directories and upload your pictures.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
