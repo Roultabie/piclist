@@ -42,9 +42,18 @@ $publicBase   = ''; // In the case of using the script in sub directory, you mus
 
 ###_Create your own theme_
 
-You just need to add your theme dir with an index.html in the script root and declare him in config.php:  
+You just need to create a dir named  ```_template``` in your gallery dir,
+This dir need this 5 files :  
 
-Availables tags ares :  
+- index.html (gallery main page)
+- firstimagetag.html (principal image tag)
+- lastimagetag.html (in case if you are using javascript, you can use this for ```<noscript>``` section
+- directory.html (the sub dir view)
+- ariane.html (the breadcumb)
+
+For display elements, you must use tags syntax : ```{mytag}``` in this files.
+
+Availables tags are :  
 
 - **{galleryPath}** : Replaced by the the url of gallery
 - **{images}** : Replaced by the base img tag
@@ -54,7 +63,7 @@ Availables tags ares :
 - **{thumbUri}** : Replaced by the url of current thumb
 - **{thumbWidth}** and **{thumbHeight}** : Respectively replaced by the thumb width and height
 - **{subDirs}** : Replaced by sub directories
-- **{ariane}** : The breadcumbs
+- **{ariane}** : The breadcumb
 - **{currentDir}** : Replaced by current dir name
 - **{comment}** : Comment of current gallery (if comment.html file exists)
 - **imageComment}** : Comment of each image (if img.html files exists)
