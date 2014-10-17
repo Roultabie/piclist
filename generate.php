@@ -1,4 +1,8 @@
 <?php
+/**
+ * Default configuration options
+ * For midification, create config.php
+ */
 $imagePattern = '/([^.]+)\.(jpg|png|gif)/u';
 $galleryDir   = 'gallery';
 $templateDir  = 'template';
@@ -10,13 +14,25 @@ $publicBase   = '';
 
 date_default_timezone_set('UTC');
 
+/**
+ * Constant creation and custom configuration loading
+ */
 define('SCRIPT_PATH', str_replace('generate.php', '', __FILE__));
 if (file_exists(SCRIPT_PATH . 'config.php')) include SCRIPT_PATH . 'config.php';
 define('GALLERY_PATH', (!empty($argv[1])) ? $argv[1] : SCRIPT_PATH .$galleryDir);
 define('PUBLIC_BASE', (!empty($argv[2])) ? $argv[2] : $publicBase);
 define('GALLERY_DIR', (!empty(PUBLIC_BASE)) ? array_pop(explode('/', PUBLIC_BASE)) : $galleryDir);
+// If user use custom theme
 define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_PATH . '/_' . $templateDir : SCRIPT_PATH . $templateDir);
 
+
+/**
+ * This function generate gallery for current dir
+ * @param  string $dirPath    full gallery path
+ * @param  string $currentDir current directory
+ * @param  string $ariane     full breadcumb
+ * @return void
+ */
 function generate($dirPath = '', $currentDir = '', $ariane = '')
 {
     if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
@@ -24,6 +40,8 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
     if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
     if (file_exists(TEMPLATE_PATH . '/ariane.html')) $arianeTag = file_get_contents(TEMPLATE_PATH . '/ariane.html');
+
+     // create dirs array with sub directories
     $assignDir = function($dirUri, $dirName) use (&$dirs, $dir)
     {
         $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
@@ -56,6 +74,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         }
         if (is_array($imagesList)) {
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
+            // php image creation function name sorted in array
             $imageFunctions = array(1 => array('fromgif', 'gif'), 2 => array('fromjpeg', 'jpeg', 90), 3 => array('frompng', 'png', 9), 4 => array('fromwbmp', '2wbmp'));
             foreach ($imagesList as $key => $name) {
                 $imageUri                           = $dirPath . '/' . $name;
@@ -94,5 +113,6 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
 }
+// Now, we can generate gallery
 if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) generate();
 ?>
