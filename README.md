@@ -82,14 +82,15 @@ Script dir is on ```/var/www``` and users galleries are in ```/home/{user1,userX
 ```php /var/www/piclist/generate.php /home/user1/~public/```  
 ```php /var/www/piclist/generate.php /home/userX/~public/```  
 
-Now, users have galleries on differents sub dirs. User1 in mywebsite/pictures , user2 42/misc/perfect/images url to access them are ~public/gallery and ~public/42/misc/perfect/images:   
+Now, users have galleries on differents sub dirs. User1 in mywebsite/pictures , user2 42/misc/perfect/images url to access them are ~public/pictures and ~public/42/misc/perfect/images:   
 
-```#User 1:
-php /var/www/piclist/generate.php /home/user1/~public/pictures /gallery
+```
+#User 1:
+php /var/www/piclist/generate.php /home/user1/~public/pictures /pictures
 
 #user2:
-php /var/www/piclist/generate.php /home/user2/~public/42/misc/perfect/images /42/misc/perfect/images```  
-
+php /var/www/piclist/generate.php /home/user2/~public/42/misc/perfect/images /42/misc/perfect/images
+```
 Users can theming galleries with _template dir in galleries root.
 
 ###_Recursive gallery_
