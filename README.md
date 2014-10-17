@@ -77,12 +77,12 @@ The command line to launch is : ```php generate.php /path/to/another/path (if ne
 
 Commande lines examples : 
 
-Script dir is on ```/var/www``` and users galleries are in ```/home/{user1,userX}/~public/``` and the url to access them are like : user1.website.com, userX.website.com  
+Script dir is on ```/var/www``` and users galleries are in ```/home/{user1,userX}/~public/``` and the url to access them are like : ```user1.website.com```, ```userX.website.com```: 
 
 ```php /var/www/piclist/generate.php /home/user1/~public/```  
 ```php /var/www/piclist/generate.php /home/userX/~public/```  
 
-Now, users have galleries on differents sub dirs. User1 in mywebsite/pictures , user2 42/misc/perfect/images url to access them are ~public/pictures and ~public/42/misc/perfect/images:   
+Now, users have galleries on differents sub dirs. User1 in ~public/pictures , user2 ~/public/42/misc/perfect/images url to access them are ```user1.mywebsite.com/pictures``` ```user2.mywebsite.com/42/misc/perfect/images```:  
 
 ```
 #User 1:
