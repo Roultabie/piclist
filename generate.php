@@ -24,10 +24,6 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
     if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
     if (file_exists(TEMPLATE_PATH . '/ariane.html')) $arianeTag = file_get_contents(TEMPLATE_PATH . '/ariane.html');
-    $assignDir = function($dirUri, $dirName) use (&$dirs, $dir)
-    {
-        $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($dirUri, $dirName), $dir);
-    };
     if (empty($dirPath))  {
         $dirPath    = GALLERY_PATH;
         $currentDir = GALLERY_DIR;
