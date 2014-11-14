@@ -1,6 +1,6 @@
 #piclist
 
-*Simple php static gallery generator (less than 5kb)*  
+*Simple php static gallery generator (less than 100 lines of code)*  
 *Need PHP >= 5.3
 
 ##How to use
