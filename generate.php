@@ -30,7 +30,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     }
     else {
         list($before, $after) = explode(GALLERY_DIR, $dirPath);
-        $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array('../', '..'), $dir);
+        $parentDir            = str_replace(array('{dirUri}', '{dirName}'), array('../', '..'), $dir);
     }
     $galleryBase = PUBLIC_BASE . $after;
     $fullAriane  = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
@@ -88,8 +88,8 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
-        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $subDirs, $ariane, $currentDir, $comment);
+        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{parentDir}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
+        $pageTo   = array(PUBLIC_BASE,  $replace, $noScript, $parentDir, $subDirs, $ariane, $currentDir, $comment);
         $page     = str_replace($pageFrom, $pageTo, $page);
         file_put_contents($galleryFile, $page, LOCK_EX);
     }
