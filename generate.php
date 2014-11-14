@@ -34,7 +34,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     }
     else {
         list($before, $after) = explode(GALLERY_DIR, $dirPath);
-        $assignDir('../', '..');
+        $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array('../', '..'), $dir);
     }
     $galleryBase = PUBLIC_BASE . $after;
     $fullAriane  = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
@@ -50,7 +50,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 $imagesList[] = $entry;
             }
             elseif (is_dir($dirPath . '/' .$entry) && !in_array($entry, $noScan) && $entry[0] !== '_') {
-                $assignDir($galleryBase . '/' . $entry, $entry);
+                $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($galleryBase . '/' . $entry, $entry), $dir);
                 generate($dirPath . '/' .$entry, $entry, $fullAriane);
             }
         }
