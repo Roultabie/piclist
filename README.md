@@ -63,6 +63,7 @@ Availables tags are :
 - **{imageWidth}** and {imageHeight} : Respectively replaced by the image width and height
 - **{thumbUri}** : Replaced by the url of current thumb
 - **{thumbWidth}** and **{thumbHeight}** : Respectively replaced by the thumb width and height
+- **{parentDir}** Replaced by .. (parentDir) box
 - **{subDirs}** : Replaced by sub directories
 - **{ariane}** : The breadcumb
 - **{currentDir}** : Replaced by current dir name
