@@ -69,7 +69,11 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                     $thumbWidth  = round($width * $thumbHeightMax / $height);
                     $thumbHeight = $thumbHeightMax;
                 }
-                if (!file_exists($thumbsPath . '/' . $name)) {
+                $thumbUri = $galleryBase . '/' . $thumbsDir . '/' . $name;
+                if ($type === 1 && preg_match('/(\x00\x21\xF9\x04.{4}\x00\x2C.*){2,}/s', file_get_contents($imageUri))) {
+                    $thumbUri = $galleryBase . '/' . $name;
+                }
+                elseif (!file_exists($thumbsPath . '/' . $name)) {
                     $source = $createFrom($imageUri);
                     $thumb  = imagecreatetruecolor($thumbWidth, $thumbHeight);
                     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $width, $height);
@@ -79,7 +83,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 $commentName  = preg_replace($GLOBALS['imagePattern'], '${1}.html', $name);
                 $imageComment = (file_exists($galleryBase . '/' .$commentName)) ? file_get_contents($galleryBase . '/' .$commentName) : '';
                 $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}');
-                $to           = array($galleryBase . '/' . $thumbsDir . '/' . $name, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment);
+                $to           = array($thumbUri, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment);
                 $firstTags[]  = str_replace($from, $to, $firstImageTag);
                 $lastTags[]   = str_replace($from, $to, $lastImageTag);
             }
