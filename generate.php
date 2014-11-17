@@ -13,7 +13,7 @@ date_default_timezone_set('UTC');
 define('SCRIPT_PATH', str_replace('generate.php', '', __FILE__));
 if (file_exists(SCRIPT_PATH . 'config.php')) include SCRIPT_PATH . 'config.php';
 define('GALLERY_PATH', (!empty($argv[1])) ? $argv[1] : SCRIPT_PATH .$galleryDir);
-define('PUBLIC_BASE', (!empty($argv[2])) ? $argv[2] : $publicBase);
+define('PUBLIC_BASE', (!empty($argv[2])) ? rtrim($argv[2], '/') : rtrim($publicBase, '/'));
 define('GALLERY_DIR', (!empty(PUBLIC_BASE)) ? array_pop(explode('/', PUBLIC_BASE)) : $galleryDir);
 define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_PATH . '/_' . $templateDir : SCRIPT_PATH . $templateDir);
 
