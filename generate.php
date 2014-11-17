@@ -69,7 +69,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 if ($type === 1 && preg_match('/(\x00\x21\xF9\x04.{4}\x00\x2C.*){2,}/s', file_get_contents($imageUri))) {
                     $thumbUri = $galleryBase . '/' . $name;
                 }
-                elseif (!file_exists($thumbsPath . '/' . $name)) {
+                elseif (!file_exists($thumbsPath . '/' . $name) && (imagetypes() & $type)) {
                     $source = $createFrom($imageUri);
                     $thumb  = imagecreatetruecolor($thumbWidth, $thumbHeight);
                     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $width, $height);
