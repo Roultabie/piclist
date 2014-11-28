@@ -77,14 +77,14 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                     $createTo($thumb, $thumbsPath . '/' . $name, $imageFunctions[$type][2]);
                 }
                 $commentName  = preg_replace($GLOBALS['imagePattern'], '${1}.html', $name);
-                $imageComment = (file_exists($galleryBase . '/' .$commentName)) ? file_get_contents($galleryBase . '/' . $commentName) : '';
+                $imageComment = (file_exists($dirPath . '/' .$commentName)) ? file_get_contents($dirPath . '/' . $commentName) : '';
                 $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}');
                 $to           = array($thumbUri, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment);
                 $firstTags[]  = str_replace($from, $to, $firstImageTag);
                 $lastTags[]   = str_replace($from, $to, $lastImageTag);
             }
         }
-        $comment  = (file_exists($galleryBase . '/comment.html')) ? file_get_contents($galleryBase . '/comment.html') : '';
+        $comment  = (file_exists($dirPath . '/comment.html')) ? file_get_contents($dirPath . '/comment.html') : '';
         $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
         $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
