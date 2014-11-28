@@ -32,6 +32,8 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         list($before, $after) = explode(GALLERY_DIR, $dirPath);
         $parentDir            = str_replace(array('{dirUri}', '{dirName}'), array('../', '..'), $dir);
     }
+    $after   = preg_replace('|/+|', '/', $after);
+    $dirPath = preg_replace('|/+|', '/', $dirPath);
     $galleryBase = PUBLIC_BASE . $after;
     $fullAriane  = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
     if (is_dir($dirPath)) {
