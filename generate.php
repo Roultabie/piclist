@@ -60,13 +60,9 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 list($width, $height, $type, $attr) = getimagesize($imageUri);
                 $createFrom     = 'imagecreate' . $imageFunctions[$type][0];
                 $createTo       = 'image' . $imageFunctions[$type][1];
-                $thumbWidth     = $GLOBALS['thumbWidth'];
                 $thumbHeight    = round($height * $thumbWidth / $width);
                 $thumbHeightMax = round($thumbWidth * $GLOBALS['thumbRatio'][1] / $GLOBALS['thumbRatio'][0]);
-                if ($thumbHeight > $thumbHeightMax) {
-                    $thumbWidth  = round($width * $thumbHeightMax / $height);
-                    $thumbHeight = $thumbHeightMax;
-                }
+                $thumbWidth     = ($thumbHeight > $thumbHeightMax) ? round($width * $thumbHeightMax / $height) : $GLOBALS['thumbWidth'];
                 $thumbUri = $galleryBase . '/' . $thumbsDir . '/' . $name;
                 if ($type === 1 && preg_match('/(\x00\x21\xF9\x04.{4}\x00\x2C.*){2,}/s', file_get_contents($imageUri))) {
                     $thumbUri = $galleryBase . '/' . $name;
