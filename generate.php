@@ -22,6 +22,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
     if (file_exists(TEMPLATE_PATH . '/firstimagetag.html')) $firstImageTag = file_get_contents(TEMPLATE_PATH . '/firstimagetag.html');
     if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
+    if (file_exists(TEMPLATE_PATH . '/exif.html')) $exif = file_get_contents(TEMPLATE_PATH . '/exif.html');
     if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
     if (file_exists(TEMPLATE_PATH . '/ariane.html')) $arianeTag = file_get_contents(TEMPLATE_PATH . '/ariane.html');
     $dirPath    = (empty($dirPath)) ? GALLERY_PATH : preg_replace('|/+|', '/', $dirPath);
@@ -48,6 +49,15 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
             }
         }
         if (is_array($imagesList)) {
+            $exifToText = function ($exif, $text) use (&$exifToText)
+            {
+                if (is_array($exif)) {
+                    foreach ($exif as $pattern => $replace) {
+                        $text = (is_array($replace)) ? $exifToText($replace, $text) : str_replace('{' . $pattern . '}', $replace, $text);
+                    }
+                    return $text;
+                }
+            };
             ($sort === 'desc') ? rsort($imagesList) : sort($imagesList);
             $imageFunctions = array(1 => array('fromgif', 'gif'), 2 => array('fromjpeg', 'jpeg', 90), 3 => array('frompng', 'png', 9), 4 => array('fromwbmp', '2wbmp'));
             foreach ($imagesList as $key => $name) {
@@ -70,8 +80,9 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 }
                 $commentName  = preg_replace($GLOBALS['imagePattern'], '${1}.html', $name);
                 $imageComment = (file_exists($dirPath . '/' .$commentName)) ? file_get_contents($dirPath . '/' . $commentName) : '';
-                $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}');
-                $to           = array($thumbUri, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment);
+                $imageExif    = $exifToText(exif_read_data($dirPath . '/' . $name), $exif);
+                $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}', '{imageExif}');
+                $to           = array($thumbUri, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment, $imageExif);
                 $firstTags[]  = str_replace($from, $to, $firstImageTag);
                 $lastTags[]   = str_replace($from, $to, $lastImageTag);
             }
@@ -83,7 +94,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{parentDir}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
         $pageTo   = array(PUBLIC_BASE, $replace, $noScript, $parentDir, $subDirs, $ariane, $currentDir, $comment);
         $page     = str_replace($pageFrom, $pageTo, $page);
-        file_put_contents($dirPath . '/index.html';, $page, LOCK_EX);
+        file_put_contents($dirPath . '/index.html', $page, LOCK_EX);
     }
 }
 if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) generate();
