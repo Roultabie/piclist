@@ -24,7 +24,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
     if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
     if (file_exists(TEMPLATE_PATH . '/ariane.html')) $arianeTag = file_get_contents(TEMPLATE_PATH . '/ariane.html');
-    $dirPath    = (empty($dirPath)) ? GALLERY_PATH : preg_replace('|/+|', '/', $dirPath;
+    $dirPath    = (empty($dirPath)) ? GALLERY_PATH : preg_replace('|/+|', '/', $dirPath);
     $currentDir = (empty($currentDir)) ? GALLERY_DIR : $currentDir;
     if ($dirPath !== GALLERY_PATH) {
         list($before, $after) = explode(GALLERY_DIR, $dirPath);
@@ -35,7 +35,6 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     $fullAriane  = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
     if (is_dir($dirPath)) {
         $thumbsPath  = $dirPath . '/' . $GLOBALS['thumbsDir'];
-        $galleryFile = $dirPath . '/index.html';
         $noScan      = (is_array($GLOBALS['noScan'])) ? array_merge($GLOBALS['noScan'], array('.', '..')) : array('.', '..');
         if (!is_dir($thumbsPath)) mkdir($thumbsPath);
         $gallery = dir($dirPath);
@@ -58,7 +57,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 $thumbHeight    = round($height * $thumbWidth / $width);
                 $thumbHeightMax = round($thumbWidth * $GLOBALS['thumbRatio'][1] / $GLOBALS['thumbRatio'][0]);
                 $thumbWidth     = ($thumbHeight > $thumbHeightMax) ? round($width * $thumbHeightMax / $height) : $GLOBALS['thumbWidth'];
-                $thumbUri = $galleryBase . '/' . $GLOBALS['thumbsDir'] . '/' . $name;
+                $thumbUri       = $galleryBase . '/' . $GLOBALS['thumbsDir'] . '/' . $name;
                 if ($type === 1 && preg_match('/(\x00\x21\xF9\x04.{4}\x00\x2C.*){2,}/s', file_get_contents($dirPath . '/' . $name))) {
                     $thumbUri = $galleryBase . '/' . $name;
                 }
@@ -84,7 +83,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{parentDir}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
         $pageTo   = array(PUBLIC_BASE, $replace, $noScript, $parentDir, $subDirs, $ariane, $currentDir, $comment);
         $page     = str_replace($pageFrom, $pageTo, $page);
-        file_put_contents($galleryFile, $page, LOCK_EX);
+        file_put_contents($dirPath . '/index.html';, $page, LOCK_EX);
     }
 }
 if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) generate();
