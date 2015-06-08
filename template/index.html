@@ -75,6 +75,21 @@
         right:0;
         margin: auto;
     }
+    #gallery span {
+        position: relative;
+        float: left;
+        display: inline-block;
+        margin: 5px;
+        line-height: 12px;
+        color: rgba(0,0,0,0);
+        transition-property: color, text-shadow;
+        transition-duration: 300ms;
+    }
+    #gallery a:hover span {
+        color: white;
+        text-shadow: 0px 0px 3px #272727;
+        text-decoration: none;
+    }
     #gallery .directory {
         float: left;
         background-color: darkgrey;
