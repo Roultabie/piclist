@@ -98,4 +98,3 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     }
 }
 if (is_dir(GALLERY_PATH) && file_exists(TEMPLATE_PATH)) generate();
-?>
