@@ -13,11 +13,17 @@
         font-family: "DejaVu Sans", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         font-size: .8em;
     }
-    h1 {
+    #logo {
+        width: 32px;
+        height: 32px;
+        vertical-align: sub;
+        margin: 0;
+    }
+    #moto {
+        display: inline-block;
         font-family: "DejaVu Sans Light", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         color: lightgrey;
-        margin: 15px 0;
-        font-size: 2.2em;
+        font-size: 28px;
     }
     #ariane, #ariane li {
         float: left;
@@ -113,7 +119,20 @@
 </head>
 <body>
 <header>
-    <h1>Piclist</h1>
+    <svg id="logo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 378.57144 378.57143"
+       id="logo">
+      <circle
+         cx="189.28572"
+         cy="189.28572"
+         r="189.28572"
+         fill="#1b1b1b" />
+      <path
+         d="m 110.26144,71.604014 0,289.739726 a 189.28572,189.28572 0 0 0 40.21485,13.25 l 0,-84.97217 50.5664,0 c 33.31305,0 58.4648,-9.19596 75.45313,-27.58789 17.12105,-18.39192 25.68164,-45.57291 25.68164,-81.54296 0,-35.64454 -8.56059,-62.66277 -25.68164,-81.054676 -16.98833,-18.55469 -42.14008,-27.83203 -75.45313,-27.83203 l -90.78125,0 z m 40.21485,40.527326 50.5664,0 c 18.71371,0 33.18086,5.94076 43.40039,17.82227 10.21954,11.88151 15.33008,28.72721 15.33008,50.53711 0,21.97265 -5.11054,38.89973 -15.33008,50.78124 -10.21953,11.88152 -24.68668,17.82227 -43.40039,17.82227 l -50.5664,0 0,-136.96289 z"
+         fill="#ffffff" />
+    </svg><h1 id="moto">iclist</h1>
     <ul id="ariane">
         {ariane}
         <li>{currentDir}</li>
