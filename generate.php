@@ -93,7 +93,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
         $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{parentDir}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
         $pageTo   = array(PUBLIC_BASE, $replace, $noScript, $parentDir, $subDirs, $ariane, $currentDir, $comment);
-        $page     = str_replace($pageFrom, $pageTo, $page);
+        $page     = preg_replace('/{(.+)}/', '', str_replace($pageFrom, $pageTo, $page));
         file_put_contents($dirPath . '/index.html', $page, LOCK_EX);
     }
 }
