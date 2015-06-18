@@ -17,7 +17,7 @@ define('PUBLIC_BASE', (!empty($argv[2])) ? rtrim($argv[2], '/') : rtrim($publicB
 define('GALLERY_DIR', (!empty(PUBLIC_BASE)) ? array_pop(explode('/', PUBLIC_BASE)) : $galleryDir);
 define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_PATH . '/_' . $templateDir : SCRIPT_PATH . $templateDir);
 
-function generate($dirPath = '', $currentDir = '', $ariane = '')
+function generate($dirPath = '', $currentDir = '', $ariane = '', $privateBaseList = '', $dirs = '')
 {
     $page          = (!file_exists(TEMPLATE_PATH . '/index.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/index.html');
     $imageTag      = (!file_exists(TEMPLATE_PATH . '/imagetag.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/imagetag.html');
@@ -35,7 +35,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
     $fullAriane  = $ariane . str_replace(array('{dirName}','{url}'), array($currentDir, $galleryBase), $arianeTag);
     if (is_dir($dirPath)) {
         $thumbsPath  = $dirPath . '/' . $GLOBALS['thumbsDir'];
-        $noScan      = (is_array($GLOBALS['noScan'])) ? array_merge($GLOBALS['noScan'], array('.', '..')) : array('.', '..');
+        $noScan      = (is_array($GLOBALS['noScan'])) ? array_merge($GLOBALS['noScan'], array('.', '..', 'p')) : array('.', '..', 'p');
         if (!is_dir($thumbsPath)) mkdir($thumbsPath);
         $gallery = dir($dirPath);
         while (($entry = $gallery->read()) !== false) {
@@ -44,7 +44,7 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
             }
             elseif (is_dir($dirPath . '/' .$entry) && !in_array($entry, $noScan) && $entry[0] !== '_') {
                 $dirs[] = str_replace(array('{dirUri}', '{dirName}'), array($galleryBase . '/' . $entry, $entry), $dir);
-                generate($dirPath . '/' .$entry, $entry, $fullAriane);
+                generate($dirPath . '/' .$entry, $entry, $fullAriane, $privateBaseList);
             }
         }
         if (is_array($imagesList)) {
@@ -85,6 +85,13 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}', '{imageExif}');
                 $to           = array($thumbUri, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment, $extractExif($exifTag));
                 $imageTags[]  = str_replace($from, $to, $imageTag);
+                if (is_dir($dirPath . '/p')) {
+                    symlink($dirPath . '/' . $name, $dirPath . '/p/' . $name);
+                    generate($dirPath . '/p', $currentDir, $ariane, $imageTags, $dirs);
+                }
+                if (strrpos($dirPath, '/p') !== false && is_array($privateBaseList)) {
+                    if ($currentDir === GALLERY_DIR) unset($parentDir);
+                }
             }
         }
         $comment  = (file_exists($dirPath . '/comment.html')) ? file_get_contents($dirPath . '/comment.html') : '';
