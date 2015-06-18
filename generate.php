@@ -19,14 +19,13 @@ define('TEMPLATE_PATH', (is_dir(GALLERY_PATH . '/_' . $templateDir)) ? GALLERY_P
 
 function generate($dirPath = '', $currentDir = '', $ariane = '')
 {
-    if (file_exists(TEMPLATE_PATH . '/index.html')) $page = file_get_contents(TEMPLATE_PATH . '/index.html');
-    if (file_exists(TEMPLATE_PATH . '/firstimagetag.html')) $firstImageTag = file_get_contents(TEMPLATE_PATH . '/firstimagetag.html');
-    if (file_exists(TEMPLATE_PATH . '/lastimagetag.html')) $lastImageTag = file_get_contents(TEMPLATE_PATH . '/lastimagetag.html');
-    if (file_exists(TEMPLATE_PATH . '/directory.html')) $dir = file_get_contents(TEMPLATE_PATH . '/directory.html');
-    if (file_exists(TEMPLATE_PATH . '/ariane.html')) $arianeTag = file_get_contents(TEMPLATE_PATH . '/ariane.html');
-    if (file_exists(TEMPLATE_PATH . '/exif.html')) $exifTag = file_get_contents(TEMPLATE_PATH . '/exif.html');
-    $dirPath    = (empty($dirPath)) ? GALLERY_PATH : preg_replace('|/+|', '/', $dirPath);
-    $currentDir = (empty($currentDir)) ? GALLERY_DIR : $currentDir;
+    $page          = (!file_exists(TEMPLATE_PATH . '/index.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/index.html');
+    $imageTag      = (!file_exists(TEMPLATE_PATH . '/imagetag.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/imagetag.html');
+    $dir           = (!file_exists(TEMPLATE_PATH . '/directory.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/directory.html');
+    $arianeTag     = (!file_exists(TEMPLATE_PATH . '/ariane.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/ariane.html');
+    $exifTag       = (!file_exists(TEMPLATE_PATH . '/exif.html')) ? '' : file_get_contents(TEMPLATE_PATH . '/exif.html');
+    $dirPath       = (empty($dirPath)) ? GALLERY_PATH : preg_replace('|/+|', '/', $dirPath);
+    $currentDir    = (empty($currentDir)) ? GALLERY_DIR : $currentDir;
     if ($dirPath !== GALLERY_PATH) {
         list($before, $after) = explode(GALLERY_DIR, $dirPath);
         $parentDir            = str_replace(array('{dirUri}', '{dirName}'), array('../', '..'), $dir);
@@ -85,16 +84,14 @@ function generate($dirPath = '', $currentDir = '', $ariane = '')
                 $imageComment = (file_exists($dirPath . '/' .$commentName)) ? file_get_contents($dirPath . '/' . $commentName) : '';
                 $from         = array('{thumbUri}', '{thumbWidth}', '{thumbHeight}', '{imageUri}', '{imageWidth}', '{imageHeight}', '{imageComment}', '{imageExif}');
                 $to           = array($thumbUri, $thumbWidth, $thumbHeight, $galleryBase . '/' . $name, $width, $height, $imageComment, $extractExif($exifTag));
-                $firstTags[]  = str_replace($from, $to, $firstImageTag);
-                $lastTags[]   = str_replace($from, $to, $lastImageTag);
+                $imageTags[]  = str_replace($from, $to, $imageTag);
             }
         }
         $comment  = (file_exists($dirPath . '/comment.html')) ? file_get_contents($dirPath . '/comment.html') : '';
-        $replace  = (is_array($firstTags)) ? implode(PHP_EOL, $firstTags) : '';
-        $noScript = (is_array($lastTags)) ? implode(PHP_EOL, $lastTags) : '';
+        $images   = (is_array($imageTags)) ? implode(PHP_EOL, $imageTags) : '';
         $subDirs  = (is_array($dirs)) ? implode(PHP_EOL, $dirs) : '';
-        $pageFrom = array('{galleryPath}', '{images}', '{imagesNoScript}', '{parentDir}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
-        $pageTo   = array(PUBLIC_BASE, $replace, $noScript, $parentDir, $subDirs, $ariane, $currentDir, $comment);
+        $pageFrom = array('{galleryPath}', '{images}', '{parentDir}', '{subDirs}', '{ariane}', '{currentDir}', '{comment}');
+        $pageTo   = array(PUBLIC_BASE, $images, $parentDir, $subDirs, $ariane, $currentDir, $comment);
         $page     = preg_replace('/{(.+)}/', '', str_replace($pageFrom, $pageTo, $page));
         file_put_contents($dirPath . '/index.html', $page, LOCK_EX);
     }
