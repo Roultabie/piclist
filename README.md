@@ -1,28 +1,28 @@
-#piclist
+# piclist
 
 *Simple php static gallery generator (less than 100 lines of code)*  
 *Need PHP >= 5.3
 
-##How to use
+## How to use
 
-###_Script installation_
+### _Script installation_
 
 - Download the script at https://github.com/Roultabie/piclist/archive/master.zip
 - Extract it on your web server
 - Create a cron task like this : ```* 1 * * * php /path/to/the/script/generate.php```
 - In the case of using the script in sub directory, you must specify the entire url to access him in config file like : ```$galleryBase = '//your.domain.com/pics/';```
 
-###_Server configuration (optional)_
+### _Server configuration (optional)_
 
 - Create a VirtualHost that points to the gallery dir like ```/path/to/the/script/gallery```
 
-###_Uploading_
+### _Uploading_
 
 - Upload your pics and dirs in the gallery dir and wait for the cron do its job.
 
-##Extras
+## Extras
 
-###_config.php_
+### _config.php_
 
 A config.php can be created to changing options of the script.  
 
@@ -41,7 +41,7 @@ $publicBase   = ''; // In the case of using the script in sub directory, you mus
 ?>
 ```
 
-###_Create your own theme_
+### _Create your own theme_
 
 You just need to create a dir named  ```_template``` in your gallery dir,
 This dir need this 5 files :  
@@ -74,12 +74,12 @@ Availables tags are :
 - **imageComment}** : Comment of each image (if img.html files exists)
 - **{exif}** : Replaced by exif information of each picture
 
-###_Displaying EXIF informations_
+### _Displaying EXIF informations_
 
 To display exif infos, you nedd to create ```exif.html``` in your template dir.
 In this file and put tags you want
 
-###_Using multiples galleries_
+### _Using multiples galleries_
 
 #### In another path
 
@@ -103,6 +103,6 @@ php /var/www/piclist/generate.php /home/user2/~public/42/misc/perfect/images /42
 ```
 Users can theming galleries with _template dir in galleries root.
 
-###_Recursive gallery_
+### _Recursive gallery_
 
 Just create sub directories and upload your pictures.
